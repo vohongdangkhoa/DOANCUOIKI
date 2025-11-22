@@ -1,0 +1,6 @@
+﻿@model MyStore.Models.Category
+<div class="mb-3">
+    @Html.LabelFor(model => model.CategoryName, "Tên danh mục", htmlAttributes: new { @class = "form-label" })
+    @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên danh mục" } })
+    @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+</div>

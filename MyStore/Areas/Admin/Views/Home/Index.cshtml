@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<MyStore.Models.Book>
+<head>
+    <style>
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<div class="container mt-4">
+    <h2 class="mb-4 fw-bold text-primary">📚 Sách Mới & Nổi Bật</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <!-- Ảnh sách -->
+                    @if (!string.IsNullOrEmpty(item.Image))
+                    {
+                        <img src="@Html.DisplayFor(modelItem =>item.Image)" />
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height:250px;">
+                            <span class="text-muted fst-italic">No Image</span>
+                        </div>
+                    }
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@item.BookTitle</h5>
+                        <p class="card-text text-truncate" style="max-height:3em;">
+                            @item.Description
+                        </p>
+                        <p class="fw-bold text-danger">@item.Price.ToString("C")</p>
+                        <div class="mt-auto">
+                            <a href="@Url.Action("Details", "Books", new { id = item.BookID })" class="btn btn-primary w-100">
+                                Xem Chi Tiết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

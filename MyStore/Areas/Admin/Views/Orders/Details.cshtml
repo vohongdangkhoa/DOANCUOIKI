@@ -1,0 +1,35 @@
+﻿@model MyStore.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Chi tiết đơn hàng</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Mã đơn hàng</dt>
+        <dd>@Model.OrderID</dd>
+
+        <dt>Khách hàng</dt>
+        <dd>@Model.Customer.CustomerName</dd>
+
+        <dt>Ngày đặt</dt>
+        <dd>@Model.OrderDate</dd>
+
+        <dt>Tổng tiền</dt>
+        <dd>@String.Format("{0:N0} đ", Model.TotalAmount)</dd>
+
+        <dt>Trạng thái thanh toán</dt>
+        <dd>@Model.PaymentStatus</dd>
+
+        <dt>Địa chỉ giao</dt>
+        <dd>@Model.DeliveryAddress</dd>
+    </dl>
+</div>
+
+<p>
+    <a class="btn btn-warning" href="@Url.Action("Edit", new { id = Model.OrderID })">Sửa</a>
+    <a class="btn btn-default" href="@Url.Action("Index")">Trở về</a>
+</p>

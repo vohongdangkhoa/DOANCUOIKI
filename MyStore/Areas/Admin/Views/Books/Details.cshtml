@@ -1,0 +1,46 @@
+﻿@model MyStore.Models.Book
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<head>
+    <style>
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<h2 class="text-white bg-info p-2 mb-4">🔍 Chi Tiết Sách</h2>
+
+<div class="card p-3 mb-3" style="max-width:700px;">
+    <div class="row">
+        <!-- Ảnh sách -->
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.Image))
+            {
+                    <img src="@Html.DisplayFor(modelItem =>Model.Image)" />
+            }
+            else
+            {
+                <span class="text-muted fst-italic">No Image</span>
+            }
+        </div>
+
+        <!-- Thông tin sách -->
+        <div class="col-md-8">
+            <p><strong>Danh mục:</strong> @Model.Category.CategoryName</p>
+            <p><strong>Tên sách:</strong> @Model.BookTitle</p>
+            <p><strong>Mô tả:</strong> @Model.Description</p>
+            <p><strong>Giá bán:</strong> @Model.Price.ToString("C")</p>
+            <p><strong>Năm XB:</strong> @Model.PublishYear</p>
+            <p><strong>Tồn kho:</strong> @Model.Stock</p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        @Html.ActionLink("Quay về danh sách", "Index", "Books", new { area = "Admin" }, new { @class = "btn btn-secondary" })
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿@model MyStore.Models.User
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>User Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dt>Username</dt>
+        <dd>@Model.Username</dd>
+
+        <dt>Password</dt>
+        <dd>@Model.Password</dd>
+
+        <dt>User Role</dt>
+        <dd>@Model.UserRole</dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Username }, new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+</p>

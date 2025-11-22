@@ -1,0 +1,30 @@
+﻿@model MyStore.Models.User
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Edit User</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Username)
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password)
+            @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserRole)
+            @Html.TextBoxFor(model => model.UserRole, new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+}

@@ -1,0 +1,59 @@
+﻿@model MyStore.Models.Book
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<head>
+    <style>
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<h2 class="text-white bg-danger ">XÓA SẢN PHẨM</h2>
+
+<div class="card border-danger">
+    <div class="card-header bg-danger text-white fw-bold">Xác Nhận Xóa</div>
+    <div class="card-body">
+        <h5 class="card-title">@Model.BookTitle</h5>
+
+        <div class="row mb-3">
+            <!-- Ảnh sách -->
+            <div class="col-md-4">
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <img src="@Html.DisplayFor(modelItem =>Model.Image)" />
+                }
+                else
+                {
+                    <span class="text-muted fst-italic">No Image</span>
+                }
+            </div>
+
+            <!-- Thông tin sách -->
+            <div class="col-md-8">
+                <p><strong>Danh mục:</strong> @Model.Category.CategoryName</p>
+                <p><strong>Mô tả:</strong> @Model.Description</p>
+                <p><strong>Giá:</strong> @Model.Price.ToString("C")</p>
+                <p><strong>Năm XB:</strong> @Model.PublishYear</p>
+                <p><strong>Tồn kho:</strong> @Model.Stock</p>
+            </div>
+        </div>
+
+        <p class="text-danger fw-bold">Bạn có chắc chắn muốn xóa sách này không?</p>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="d-flex gap-2">
+                <input type="submit" value="Xóa" class="btn btn-danger" />
+                @Html.ActionLink("Hủy", "Index", "Books", new { area = "Admin" }, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>
+

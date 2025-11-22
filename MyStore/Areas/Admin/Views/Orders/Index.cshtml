@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MyStore.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Danh sách đơn hàng</h2>
+
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã Đơn Hàng</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Thanh toán</th>
+            <th>Địa chỉ giao</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.OrderID</td>
+                <td>@item.Customer.CustomerName</td>
+                <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@String.Format("{0:N0} đ", item.TotalAmount)</td>
+                <td>@item.PaymentStatus</td>
+                <td>@item.DeliveryAddress</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = item.OrderID })" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a href="@Url.Action("Edit", new { id = item.OrderID })" class="btn btn-warning btn-sm">Sửa</a>
+                    <a href="@Url.Action("Delete", new { id = item.OrderID })" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">+ Tạo đơn hàng</a>
+</p>

@@ -1,0 +1,35 @@
+﻿@model MyStore.Models.Customer
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Chi tiết khách hàng</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Mã khách hàng</dt>
+        <dd>@Model.CustomerID</dd>
+
+        <dt>Họ tên</dt>
+        <dd>@Model.CustomerName</dd>
+
+        <dt>Số điện thoại</dt>
+        <dd>@Model.CustomerPhone</dd>
+
+        <dt>Email</dt>
+        <dd>@Model.CustomerEmail</dd>
+
+        <dt>Địa chỉ</dt>
+        <dd>@Model.CustomerAddress</dd>
+
+        <dt>Tài khoản Username</dt>
+        <dd>@Model.Username</dd>
+    </dl>
+</div>
+
+<p>
+    <a class="btn btn-warning" href="@Url.Action("Edit", new { id = Model.CustomerID })">Sửa</a>
+    <a class="btn btn-default" href="@Url.Action("Index")">Trở về</a>
+</p>
