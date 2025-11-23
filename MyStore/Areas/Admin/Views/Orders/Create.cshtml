@@ -4,15 +4,13 @@
     ViewBag.Title = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>Tạo đơn hàng</h2>
+<h2 class="bg-success">Tạo Đơn Hàng</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <hr />
-
         <div class="form-group">
             @Html.LabelFor(model => model.CustomerID, "Khách hàng", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -50,8 +48,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Tạo" class="btn btn-primary" />
-                <a href="@Url.Action("Index")" class="btn btn-default">Hủy</a>
+                <input type="submit" value="Tạo" class="btn btn-primary btn-sm" />
+                <a href="@Url.Action("Index")" class="btn btn-secondary">Hủy</a>
             </div>
         </div>
     </div>

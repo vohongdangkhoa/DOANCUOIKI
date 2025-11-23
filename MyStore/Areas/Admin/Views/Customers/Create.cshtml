@@ -4,7 +4,7 @@
     ViewBag.Title = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>Thêm khách hàng</h2>
+<h2 class="bg-success">THÊM KHÁCH HÀNG MỚI</h2>
 
 @using (Html.BeginForm())
 {
@@ -51,7 +51,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Thêm" class="btn btn-primary" />
-                <a class="btn btn-default" href="@Url.Action("Index")">Hủy</a>
+                <a class="btn btn-secondary" href="@Url.Action("Index")">Hủy</a>
             </div>
         </div>
     </div>

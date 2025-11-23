@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyStore.Models.Book>
+﻿@model MyStore.Models.ViewModel.BookSearchVM
 
 @{
     ViewBag.Title = "Index";
@@ -6,65 +6,56 @@
 }
 <head>
     <style>
-        img {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
+        .search-container, .order-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-top: 20px;
+            justify-content: center;
         }
     </style>
 </head>
 <h2 class="bg-success">📚 DANH SÁCH SẢN PHẨM</h2>
-<table class="table bg-info container-fluid">
-    <thead class="table-dark">
-        <tr>
-            <th>Ảnh</th>
-            <th>Danh Mục</th>
-            <th>Tên Sách</th>
-            <th>Mô Tả</th>
-            <th>Giá</th>
-            <th>Hành Động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <!-- Ảnh -->
-                <td>
-                   <img src="@Html.DisplayFor(modelItem =>item.Image)"/>
-                </td>
 
-                <!-- Danh mục -->
-                <td>@item.Category.CategoryName</td>
+@using (Html.BeginForm("Index", "Books", FormMethod.Get))
+{
+    <div class="search-container">
 
-                <!-- Tên Sách -->
-                <td class="fw-semibold">@item.BookTitle</td>
+        <div style="width:250px; margin-right:10px;">
+            @Html.TextBoxFor(m => m.Keyword, new
+            {
+                @class = "form-control",
+                placeholder = "Nhập tên sách..."
+            })
+        </div>
 
-                <!-- Mô Tả -->
-                <td>
-                    @{
-                        var desc = !string.IsNullOrEmpty(item.Description)
-                            ? (item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)
-                            : "";
-                    }
-                    @desc
-                </td>
+        <div style="width:150px; margin-right:10px;">
+            @Html.TextBoxFor(m => m.MinPrice, new
+            {
+                @class = "form-control",
+                placeholder = "Giá thấp nhất"
+            })
+        </div>
 
-                <!-- Giá -->
-                <td class="fw-bold text-danger">@item.Price.ToString("C")</td>
+        <div style="width:150px; margin-right:10px;">
+            @Html.TextBoxFor(m => m.MaxPrice, new
+            {
+                @class = "form-control",
+                placeholder = "Giá cao nhất"
+            })
+        </div>
 
-                <!-- Hành Động -->
-                <td class="text-center">
-                    <a href="@Url.Action("Edit", "Books", new { id = item.BookID, area = "Admin" })" class="btn btn-primary btn-sm">Chỉnh Sửa</a>
-                    <a href="@Url.Action("Details", "Books", new { id = item.BookID, area = "Admin" })" class="btn btn-warning btn-sm">Chi Tiết</a>
-                    <a href="@Url.Action("Delete", "Books", new { id = item.BookID, area = "Admin" })"
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Bạn chắc chắn muốn xóa sách này?');">Xóa</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<div class="mb-3">
-    @Html.ActionLink("Thêm Sách Mới", "Create", "Books", new { area = "Admin" }, new { @class = "btn btn-success" })
-</div>
+        <button type="submit" class="btn btn-primary">
+            Tìm Kiếm
+        </button>
+    </div>
+    <select name="sortOrder" class="form-control">
+        <option value="">-- Mặc định --</option>
+        <option value="price_asc">Giá tăng dần</option>
+        <option value="price_desc">Giá giảm dần</option>
+        <option value="title_asc">Tên A-Z</option>
+        <option value="title_desc">Tên Z-A</option>
+    </select>
+}
+
+@Html.Partial("PVListBook", Model)

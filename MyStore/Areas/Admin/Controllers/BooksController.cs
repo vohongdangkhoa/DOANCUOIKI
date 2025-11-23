@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyStore.Models;
+using MyStore.Models.ViewModel;
 
 namespace MyStore.Areas.Admin.Controllers
 {
@@ -15,11 +16,57 @@ namespace MyStore.Areas.Admin.Controllers
         private MyStoreEntities db = new MyStoreEntities();
 
         // GET: Admin/Books
-        public ActionResult Index()
+        public ActionResult Index(string keyword, decimal? minPrice, decimal? maxPrice,string sortOrder)
         {
-            var books = db.Books.Include(b => b.Category);
-            return View(books.ToList());
+            var books = db.Books.Include(b => b.Category).AsQueryable();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                books = books.Where(b => b.BookTitle.Contains(keyword));
+            }
+
+            if (minPrice.HasValue)
+            {
+                books = books.Where(b => b.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                books = books.Where(b => b.Price <= maxPrice.Value);
+            }
+            switch(sortOrder)
+            {
+                case "price_asc":
+                    books = books.OrderBy(b => b.Price);
+                    break;
+                case "price_desc":
+                    books = books.OrderByDescending(b => b.Price);
+                    break;
+                case "title_asc":
+                    books = books.OrderBy(b => b.BookTitle);
+                    break;
+                case "title_desc":
+                    books = books.OrderByDescending(b => b.BookTitle);
+                    break;
+                default:
+                    books = books.OrderBy(b => b.BookID);
+                    break;
+            }ViewBag.CurrentSort = sortOrder;
+
+
+            var vm = new BookSearchVM
+            {
+                Keyword = keyword,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                Books = books.ToList()
+                
+
+            };
+
+            return View(vm);
         }
+
 
         // GET: Admin/Books/Details/5
         public ActionResult Details(int? id)

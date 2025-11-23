@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>Chi tiết khách hàng</h2>
+<h2 class="bg-success">CHI TIẾT THÔNG TIN KHÁCH HÀNG</h2>
 
 <div>
     <hr />
@@ -24,12 +24,12 @@
         <dt>Địa chỉ</dt>
         <dd>@Model.CustomerAddress</dd>
 
-        <dt>Tài khoản Username</dt>
+        <dt>Tên Đăng Nhập</dt>
         <dd>@Model.Username</dd>
     </dl>
 </div>
 
 <p>
     <a class="btn btn-warning" href="@Url.Action("Edit", new { id = Model.CustomerID })">Sửa</a>
-    <a class="btn btn-default" href="@Url.Action("Index")">Trở về</a>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Trở về</a>
 </p>

@@ -4,15 +4,13 @@
     ViewBag.Title = "Edit";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>Chỉnh sửa đơn hàng</h2>
+<h2 class="bg-success">Chỉnh Sửa Đơn Hàng</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <hr />
-
         @Html.HiddenFor(m => m.OrderID)
 
         <div class="form-group">
@@ -53,7 +51,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Lưu lại" class="btn btn-primary" />
-                <a href="@Url.Action("Index")" class="btn btn-default">Hủy</a>
+                <a href="@Url.Action("Index")" class="btn btn-secondary">Hủy</a>
             </div>
         </div>
     </div>

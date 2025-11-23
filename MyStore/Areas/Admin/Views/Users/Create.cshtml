@@ -13,24 +13,24 @@
     <div class="form-horizontal">
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Username)
+            <p>Tên Đăng Nhập</p>
             @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Username)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Password)
+            <p>Mật Khẩu</p>
             @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Password)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UserRole)
+           <p>Quyền Người Dùng</p>
             @Html.TextBoxFor(model => model.UserRole, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.UserRole)
         </div>
 
-        <button type="submit" class="btn btn-success">Create</button>
-        @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-secondary" })
+        <button type="submit" class="btn btn-success">Thêm Mới</button>
+        @Html.ActionLink("Trở Về", "Index", null, new { @class = "btn btn-secondary" })
     </div>
 }

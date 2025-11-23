@@ -186,6 +186,7 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>MyStoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\BookSearchVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +267,7 @@
     <Content Include="Areas\Admin\Views\Books\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Books\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Books\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Books\PVListBook.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

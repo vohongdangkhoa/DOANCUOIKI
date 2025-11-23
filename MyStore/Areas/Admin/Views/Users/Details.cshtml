@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>User Details</h2>
+<h2 class="bg-success">CHI TIẾT TÀI KHOẢN NGƯỜI DÙNG</h2>
 
 <div>
     <h4>User</h4>
@@ -23,6 +23,6 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Username }, new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Edit", "Edit", new { id = HttpUtility.UrlEncode(Model.Username) }, new { @class = "btn btn-warning" }) |
     @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
 </p>
