@@ -1,0 +1,109 @@
+﻿@model List<MyStore.Models.CartItem>
+
+@{
+    ViewBag.Title = "Giỏ hàng - MyStore";
+}
+
+<div class="container">
+    <div class="cart-container">
+        <h1><i class="fas fa-shopping-cart"></i> Giỏ hàng của bạn</h1>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h2>Giỏ hàng của bạn đang trống</h2>
+                <p>Hãy khám phá các sản phẩm và thêm vào giỏ hàng!</p>
+                <a href="@Url.Action("Index", "Home")" class="btn-continue-shopping">
+                    <i class="fas fa-shopping-bag"></i> Tiếp tục mua sắm
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="cart-header">
+                <div class="cart-column product-info">Sản phẩm</div>
+                <div class="cart-column price">Đơn giá</div>
+                <div class="cart-column quantity">Số lượng</div>
+                <div class="cart-column total">Thành tiền</div>
+                <div class="cart-column action">Thao tác</div>
+            </div>
+
+            <div class="cart-items">
+                @foreach (var item in Model)
+                {
+                    <div class="cart-item" data-book-id="@item.BookID">
+                        <div class="product-info">
+                            <img src="@(string.IsNullOrEmpty(item.Image) ? "/Content/images/default-book.jpg" : item.Image)"
+                                 alt="@item.BookTitle" class="cart-item-image">
+                            <div class="cart-item-details">
+                                <div class="cart-item-title">@item.BookTitle</div>
+                                <div class="cart-item-actions">
+                                    <button class="btn-remove" data-book-id="@item.BookID">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cart-item-price">@item.Price.ToString("N0") ₫</div>
+
+                        <div class="quantity-selector">
+                            <button class="quantity-btn quantity-minus" data-book-id="@item.BookID">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" class="quantity-input" value="@item.Quantity" min="1"
+                                   data-book-id="@item.BookID" data-prev-value="@item.Quantity">
+                            <button class="quantity-btn quantity-plus" data-book-id="@item.BookID">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="cart-item-total">@item.Total.ToString("N0") ₫</div>
+
+                        <div class="cart-item-action">
+                            <button class="btn-remove-lg" data-book-id="@item.BookID" title="Xóa sản phẩm">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-section">
+                    <div class="summary-row">
+                        <span class="label">Tạm tính:</span>
+                        <span class="value">@Model.Sum(item => item.Total).ToString("N0") ₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Phí vận chuyển:</span>
+                        <span class="value">0 ₫</span>
+                    </div>
+                    <div class="summary-row discount">
+                        <span class="label">Khuyến mãi:</span>
+                        <span class="value">-0 ₫</span>
+                    </div>
+                    <div class="summary-row total-price">
+                        <span class="label">Tổng cộng:</span>
+                        <span class="value">@Model.Sum(item => item.Total).ToString("N0") ₫</span>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button class="btn-checkout">
+                        <i class="fas fa-credit-card"></i> Tiến hành đặt hàng
+                    </button>
+                    <a href="@Url.Action("Index", "Home")" class="btn-continue">
+                        <i class="fas fa-arrow-left"></i> Tiếp tục mua sắm
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/js/cart.js"></script>
+}

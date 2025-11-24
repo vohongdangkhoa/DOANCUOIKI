@@ -1,0 +1,67 @@
+﻿@model List<MyStore.Models.Book>
+@{
+    ViewBag.Title = ViewBag.CategoryName ?? "Danh mục sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="category-header">
+        <h1 class="category-title">@(ViewBag.CategoryName ?? "Tất cả sách")</h1>
+        <div class="category-info">
+            <span class="product-count">@Model.Count sản phẩm</span>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="products-grid">
+            @foreach (var book in Model)
+            {
+                <div class="product-card">
+                    <a href="@Url.Action("Details", "Product", new { id = book.BookID })">
+                        <img src="@(string.IsNullOrEmpty(book.Image) ? "/Content/images/default-book.jpg" : book.Image)"
+                             alt="@book.BookTitle" class="product-image">
+                    </a>
+                    <div class="product-info">
+                        <a href="@Url.Action("Details", "Product", new { id = book.BookID })" class="product-title">@book.BookTitle</a>
+                        <div class="product-price">@book.Price.ToString("N0") ₫</div>
+                        <div class="product-rating">
+                            <div class="stars">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                            </div>
+                            <span class="sold">Đã bán @(book.Stock / 10)k</span>
+                        </div>
+                        <button class="add-to-cart-btn"
+                                data-book-id="@book.BookID"
+                                data-book-title="@book.BookTitle"
+                                data-price="@book.Price"
+                                data-image="@(string.IsNullOrEmpty(book.Image) ? "/Content/images/default-book.jpg" : book.Image)">
+                            <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-category">
+            <i class="fas fa-book-open"></i>
+            <h3>Không có sản phẩm nào trong danh mục này</h3>
+            <p>Hiện tại danh mục này chưa có sản phẩm. Vui lòng quay lại sau!</p>
+            <a href="@Url.Action("Index", "Home")" class="btn-continue-shopping">
+                <i class="fas fa-arrow-left"></i> Quay lại trang chủ
+            </a>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        // Category page specific JavaScript will be handled by product.js
+        console.log('Category page loaded');
+    </script>
+}

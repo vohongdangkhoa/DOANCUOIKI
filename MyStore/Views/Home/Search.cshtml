@@ -1,0 +1,114 @@
+﻿@model List<MyStore.Models.Book>
+
+@{
+    ViewBag.Title = "Tìm kiếm: " + ViewBag.SearchQuery + " - MyStore";
+}
+
+<div class="container">
+    <!-- Search Header -->
+    <div class="search-header">
+        <div class="search-results-info">
+            <h1>Kết quả tìm kiếm cho: "<span class="search-query">@ViewBag.SearchQuery</span>"</h1>
+            <div class="results-stats">
+                <span class="results-count">Tìm thấy @Model.Count kết quả</span>
+            </div>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="sort-options">
+            <div class="sort-dropdown">
+                <span class="sort-label">Sắp xếp theo:</span>
+                <select class="sort-select" id="sortSelect">
+                    <option value="default">Mặc định</option>
+                    <option value="price_asc">Giá thấp đến cao</option>
+                    <option value="price_desc">Giá cao đến thấp</option>
+                    <option value="name_asc">Tên A-Z</option>
+                    <option value="name_desc">Tên Z-A</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    @if (Model.Any())
+    {
+        <div class="search-results">
+            <div class="products-grid search-grid">
+                @foreach (var book in Model)
+                {
+                    <div class="product-card" data-price="@book.Price" data-name="@book.BookTitle.ToLower()">
+                        <a href="@Url.Action("Detail", "Product", new { id = book.BookID })">
+                            <img src="@(string.IsNullOrEmpty(book.Image) ? "/Content/images/default-book.jpg" : book.Image)"
+                                 alt="@book.BookTitle" class="product-image">
+                        </a>
+                        <div class="product-info">
+                            <a href="@Url.Action("Detail", "Product", new { id = book.BookID })" class="product-title">@book.BookTitle</a>
+                            <div class="product-price">@book.Price.ToString("N0") ₫</div>
+                            <div class="product-rating">
+                                <div class="stars">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= 4)
+                                        {
+                                            <i class="fas fa-star"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-star-half-alt"></i>
+                                        }
+                                    }
+                                </div>
+                                <span class="sold">Đã bán @(book.Stock / 10)k</span>
+                            </div><button class="add-to-cart-btn"
+                                          data-book-id="@book.BookID"
+                                          data-book-title="@book.BookTitle"
+                                          data-price="@book.Price"
+                                          data-image="@(string.IsNullOrEmpty(book.Image) ? "/Content/images/default-book.jpg" : book.Image)">
+                                <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- No Results -->
+        <div class="no-results">
+            <div class="no-results-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h2>Không tìm thấy kết quả nào</h2>
+            <p>Không có sản phẩm nào phù hợp với từ khóa "<strong>@ViewBag.SearchQuery</strong>"</p>
+            <div class="suggestions">
+                <h3>Gợi ý:</h3>
+                <ul>
+                    <li>Kiểm tra lỗi chính tả</li>
+                    <li>Thử với từ khóa khác</li>
+                    <li>Thử với từ khóa ngắn gọn hơn</li>
+                    <li>Tìm kiếm với từ khóa tổng quát hơn</li>
+                </ul>
+            </div>
+            <a href="@Url.Action("Index", "Home")" class="btn-back-home">
+                <i class="fas fa-home"></i> Quay lại trang chủ
+            </a>
+        </div>
+    }
+
+    <!-- Search Suggestions -->
+    <div class="search-suggestions">
+        <h3>Tìm kiếm phổ biến</h3>
+        <div class="suggestion-tags">
+            <a href="@Url.Action("Search", new { q = "sách văn học" })" class="suggestion-tag">sách văn học</a>
+            <a href="@Url.Action("Search", new { q = "sách kinh tế" })" class="suggestion-tag">sách kinh tế</a>
+            <a href="@Url.Action("Search", new { q = "sách thiếu nhi" })" class="suggestion-tag">sách thiếu nhi</a>
+            <a href="@Url.Action("Search", new { q = "sách kỹ năng" })" class="suggestion-tag">sách kỹ năng</a>
+            <a href="@Url.Action("Search", new { q = "sách ngoại ngữ" })" class="suggestion-tag">sách ngoại ngữ</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/js/search.js"></script>
+}

@@ -1,0 +1,495 @@
+﻿@model MyStore.Models.Book
+
+@{
+    ViewBag.Title = Model.BookTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")" class="text-decoration-none">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Books")" class="text-decoration-none">Sách</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Books", new { categoryId = Model.CategoryID })" class="text-decoration-none">@Model.Category.CategoryName</a></li>
+            <li class="breadcrumb-item active">@Model.BookTitle</li>
+        </ol>
+    </nav>
+
+    <div class="row bg-white p-4 rounded shadow-sm">
+        <!-- Hình ảnh sách -->
+        <div class="col-md-5">
+            <div class="product-gallery">
+                <div class="main-image text-center mb-3">
+                    <img src="@(string.IsNullOrEmpty(Model.Image) ? "/Content/images/default-book.jpg" : Model.Image)"
+                         alt="@Model.BookTitle"
+                         class="img-fluid rounded border"
+                         id="main-image"
+                         style="max-height: 400px; object-fit: contain;">
+                </div>
+                <div class="image-thumbnails d-flex justify-content-center gap-2">
+                    <img src="@(string.IsNullOrEmpty(Model.Image) ? "/Content/images/default-book.jpg" : Model.Image)"
+                         alt="@Model.BookTitle"
+                         class="img-thumbnail active"
+                         style="width: 60px; height: 80px; object-fit: cover; cursor: pointer;"
+                         onclick="changeImage(this)">
+                    <!-- Có thể thêm nhiều ảnh khác nếu có -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Thông tin chính -->
+        <div class="col-md-7">
+            <h1 class="product-title h3 fw-bold text-dark mb-2">@Model.BookTitle</h1>
+
+            <div class="product-rating mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="rating-stars text-warning me-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="text-muted me-3">4.5</span>
+                    <span class="text-muted me-3">|</span>
+                    <span class="text-muted me-3">1.2k đánh giá</span>
+                    <span class="text-muted">|</span>
+                    <span class="text-muted ms-3">@(Model.Stock / 10)k+ đã bán</span>
+                </div>
+            </div>
+            <div class="product-price-section mb-4 p-3 bg-light rounded">
+                <div class="current-price h2 text-danger fw-bold mb-1">
+                    @Model.Price.ToString("N0") ₫
+                </div>
+                <div class="original-price text-muted text-decoration-line-through">
+                    @((Model.Price * 1.2m).ToString("N0")) ₫
+                </div>
+                <div class="discount-badge badge bg-danger mt-1">
+                    GIẢM 20%
+                </div>
+            </div>
+
+            <!-- Thông tin vận chuyển -->
+            <div class="shipping-info mb-4">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-truck text-success me-2"></i>
+                            <div>
+                                <small class="d-block fw-bold">Vận chuyển</small>
+                                <small class="text-muted">Miễn phí vận chuyển</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                            <div>
+                                <small class="d-block fw-bold">Giao đến</small>
+                                <small class="text-muted">Q.1, TP.HCM</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chọn số lượng -->
+            <div class="quantity-selector mb-4">
+                <label class="form-label fw-bold">Số lượng</label>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary quantity-btn" type="button" onclick="decreaseQuantity()">-</button>
+                    <input type="number" class="form-control text-center mx-2 quantity-input" value="1" min="1" max="@Model.Stock" style="width: 80px;">
+                    <button class="btn btn-outline-secondary quantity-btn" type="button" onclick="increaseQuantity()">+</button>
+                    <span class="text-muted ms-3">@Model.Stock sản phẩm có sẵn</span>
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="product-actions mb-4">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-danger w-100 py-3 add-to-cart-btn"
+                                data-book-id="@Model.BookID"
+                                data-book-title="@Model.BookTitle">
+                            <i class="fas fa-cart-plus me-2"></i>
+                            THÊM VÀO GIỎ HÀNG
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-danger w-100 py-3 buy-now-btn"
+                                data-book-id="@Model.BookID"
+                                data-book-title="@Model.BookTitle">
+                            <i class="fas fa-bolt me-2"></i>
+                            MUA NGAY
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin bảo hành -->
+            <div class="warranty-info">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <i class="fas fa-shield-alt text-warning d-block mb-2 fs-4"></i>
+                        <small class="d-block fw-bold">Bảo hành</small>
+                        <small class="text-muted">Chính hãng</small>
+                    </div>
+                    <div class="col-4">
+                        <i class="fas fa-sync-alt text-success d-block mb-2 fs-4"></i>
+                        <small class="d-block fw-bold">Đổi trả</small>
+                        <small class="text-muted">7 ngày</small>
+                    </div>
+                    <div class="col-4">
+                        <i class="fas fa-phone-alt text-primary d-block mb-2 fs-4"></i>
+                        <small class="d-block fw-bold">Hỗ trợ</small>
+                        <small class="text-muted">24/7</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông tin chi tiết sách -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="bg-white rounded shadow-sm">
+                <div class="product-detail-tabs">
+                    <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
+                                MÔ TẢ SẢN PHẨM
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">
+                                THÔNG TIN CHI TIẾT
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                                ĐÁNH GIÁ (@((Model.Stock / 100) + 50))
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content p-4" id="productTabsContent">
+                        <!-- Tab mô tả --><div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <h5 class="fw-bold mb-3">Giới thiệu sách</h5>
+                            <p class="mb-4">@Model.Description</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold mb-2">Điểm nổi bật:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i> Bìa cứng cao cấp</li>
+                                        <li><i class="fas fa-check text-success me-2"></i> Giấy chất lượng cao</li>
+                                        <li><i class="fas fa-check text-success me-2"></i> Minh họa đẹp mắt</li>
+                                        <li><i class="fas fa-check text-success me-2"></i> Phù hợp mọi lứa tuổi</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold mb-2">Phù hợp cho:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-user-graduate text-primary me-2"></i> Học sinh, sinh viên</li>
+                                        <li><i class="fas fa-user-tie text-info me-2"></i> Người đi làm</li>
+                                        <li><i class="fas fa-book-reader text-warning me-2"></i> Người yêu sách</li>
+                                        <li><i class="fas fa-gift text-danger me-2"></i> Quà tặng ý nghĩa</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab thông số -->
+                        <div class="tab-pane fade" id="specs" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td class="fw-bold bg-light" style="width: 40%;">Tên sách</td>
+                                                <td>@Model.BookTitle</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold bg-light">Tác giả</td>
+                                                <td>@Model.Author</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold bg-light">Thể loại</td>
+                                                <td>@Model.Category.CategoryName</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold bg-light">Tình trạng</td>
+                                                <td><span class="badge bg-success">Còn hàng</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td class="fw-bold bg-light" style="width: 40%;">Giá</td>
+                                                <td class="text-danger fw-bold">@Model.Price.ToString("N0") ₫</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold bg-light">Số lượng</td>
+                                                <td>@Model.Stock sản phẩm</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold bg-light">Bảo hành</td>
+                                                <td>12 tháng</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fw-bold bg-light">Xuất xứ</td>
+                                                <td>Việt Nam</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab đánh giá -->
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-4 text-center border-end">
+                                    <div class="rating-overview mb-4">
+                                        <h2 class="text-warning fw-bold">4.5/5</h2>
+                                        <div class="rating-stars text-warning mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <p class="text-muted">@((Model.Stock / 100) + 50) đánh giá</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <!-- Review mẫu -->
+                                    <div class="review-item mb-4 pb-4 border-bottom">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="fw-bold">Nguyễn Văn A</span>
+                                            <small class="text-muted">2 ngày trước</small>
+                                        </div>
+                                        <div class="rating-stars text-warning mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <p class="mb-2">Sách rất hay, chất lượng in ấn tốt, giao hàng nhanh. Sẽ ủng hộ shop dài dài!</p>
+                                        <div class="review-images d-flex gap-2">
+                                            <img src="https://via.placeholder.com/60x60" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                            <img src="https://via.placeholder.com/60x60" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                        </div>
+                                    </div>
+
+                                    <div class="review-item mb-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="fw-bold">Trần Thị B</span>
+                                            <small class="text-muted">1 tuần trước</small>
+                                        </div>
+                                        <div class="rating-stars text-warning mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <p class="mb-0">Nội dung hấp dẫn, hình ảnh minh họa đẹp. Đóng gói cẩn thận, giao hàng đúng hẹn.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sách cùng danh mục -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="bg-white rounded shadow-sm p-4">
+                <h4 class="fw-bold mb-4">SẢN PHẨM TƯƠNG TỰ</h4>
+                <div class="row" id="related-books">
+                    <!-- Sẽ load bằng AJAX -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles {
+    <style>
+        .product-gallery .img-thumbnail.active {
+            border-color: #ee4d2d;
+            border-width: 2px;
+        }
+
+        .nav-tabs .nav-link {
+            color: #333;
+            font-weight: 500;
+            border: none;
+            padding: 12px 24px;
+        }
+
+            .nav-tabs .nav-link.active {
+                color: #ee4d2d;
+                border-bottom: 2px solid #ee4d2d;
+                background: none;
+            }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+        }
+
+        .quantity-input {
+            height: 40px;
+        }
+
+        .btn-outline-danger {
+            border-color: #ee4d2d;
+            color: #ee4d2d;
+        }
+
+            .btn-outline-danger:hover {
+                background-color: #ee4d2d;
+                color: white;
+            }
+
+        .btn-danger {
+            background-color: #ee4d2d;
+            border-color: #ee4d2d;
+        }
+
+            .btn-danger:hover {
+                background-color: #d73211;
+                border-color: #d73211;
+            }
+
+        .breadcrumb-item a {
+            color: #05a;
+        }
+
+        .breadcrumb-item.active {
+            color: #ee4d2d;
+        }
+
+        .discount-badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+    </style>
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Thay đổi ảnh chính
+            window.changeImage = function (element) {
+                $('.image-thumbnails img').removeClass('active');
+                $(element).addClass('active');
+                $('#main-image').attr('src', $(element).attr('src'));
+            }
+
+            // Tăng số lượng
+            window.increaseQuantity = function () {
+                const input = $('.quantity-input');
+                const max = parseInt(input.attr('max'));
+                let value = parseInt(input.val());
+                if (value < max) {
+                    input.val(value + 1);
+                }
+            }
+
+            // Giảm số lượng
+            window.decreaseQuantity = function () {
+                const input = $('.quantity-input');
+                let value = parseInt(input.val());
+                if (value > 1) {
+                    input.val(value - 1);
+                }
+            }
+
+            // Thêm vào giỏ hàng
+            $('.add-to-cart-btn').click(function () {
+                const bookId = $(this).data('book-id');const bookTitle = $(this).data('book-title');
+                const quantity = $('.quantity-input').val();
+
+                $.post('@Url.Action("AddToCart", "Cart")', {
+                    id: bookId,
+                    quantity: quantity
+                })
+                .done(function (response) {
+                    if (response.success) {
+                        showToast('success', `Đã thêm ${quantity} "${bookTitle}" vào giỏ hàng`);
+                        updateCartCount();
+                    } else {
+                        showToast('error', 'Có lỗi xảy ra: ' + response.message);
+                    }
+                })
+                .fail(function () {
+                    showToast('error', 'Có lỗi xảy ra khi thêm vào giỏ hàng');
+                });
+            });
+
+            // Mua ngay
+            $('.buy-now-btn').click(function () {
+                const bookId = $(this).data('book-id');
+                const quantity = $('.quantity-input').val();
+
+                $.post('@Url.Action("AddToCart", "Cart")', {
+                    id: bookId,
+                    quantity: quantity
+                })
+                .done(function (response) {
+                    if (response.success) {
+                        window.location.href = '@Url.Action("Index", "Cart")';
+                    } else {
+                        showToast('error', 'Có lỗi xảy ra: ' + response.message);
+                    }
+                })
+                .fail(function () {
+                    showToast('error', 'Có lỗi xảy ra khi thêm vào giỏ hàng');
+                });
+            });
+
+            // Load sách cùng danh mục
+            function loadRelatedBooks() {
+                const categoryId = @Model.CategoryID;
+
+                $.get('@Url.Action("GetBooksByCategory", "Books")', {
+                    categoryId: categoryId,
+                    excludeId: @Model.BookID
+                })
+                .done(function (data) {
+                    $('#related-books').html(data);
+                })
+                .fail(function () {
+                    $('#related-books').html('<div class="col-12 text-center"><p>Không có sách nào cùng thể loại</p></div>');
+                });
+            }
+
+            loadRelatedBooks();
+
+            // Hàm hiển thị thông báo
+            function showToast(type, message) {
+                // Có thể tích hợp toast library ở đây
+                alert(message);
+            }
+
+            // Cập nhật số lượng giỏ hàng
+            function updateCartCount() {
+                $.get('@Url.Action("GetCartCount", "Cart")', function (count) {
+                    $('.cart-count').text(count);
+                });
+            }
+        });
+    </script>
+}

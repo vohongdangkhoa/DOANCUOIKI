@@ -1,9 +1,166 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Giới Thiệu - MyStore";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <p>Use this area to provide additional information.</p>
-</main>
+<div class="about-page">
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Chào Mừng Đến Với HKT</h1>
+                <p class="hero-subtitle">Thế giới sách trực tuyến - Nơi tri thức kết nối tâm hồn</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10,000+</span>
+                        <span class="stat-label">Đầu Sách</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50,000+</span>
+                        <span class="stat-label">Độc Giả</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Năm Kinh Nghiệm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="about-content">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Câu Chuyện Của Chúng Tôi</h2>
+                    <p>
+                        HKT được thành lập với sứ mệnh mang tri thức đến với mọi người.
+                        Từ những cuốn sách đầu tiên vào năm 1900 hồi đó, chúng tôi đã không ngừng phát triển
+                        để trở thành điểm đến tin cậy cho những người yêu sách.
+                    </p>
+                    <p>
+                        Với hơn 10,000 đầu sách đa dạng thể loại từ văn học, kinh tế, kỹ năng
+                        đến truyện tranh, sách thiếu nhi, chúng tôi tự hào mang đến cho bạn
+                        kho tàng tri thức phong phú nhất.
+                    </p>
+
+                    <div class="mission-vision">
+                        <div class="mission">
+                            <h3><i class="fas fa-bullseye"></i> Sứ Mệnh</h3>
+                            <p>Lan tỏa văn hóa đọc và mang tri thức đến với cộng đồng</p>
+                        </div>
+                        <div class="vision">
+                            <h3><i class="fas fa-eye"></i> Tầm Nhìn</h3>
+                            <p>Trở thành nhà sách trực tuyến hàng đầu Thế Giới</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-image">
+                    <img src="/Content/images/about-store.jpg" alt="MyStore Bookstore" class="store-image">
+                    <div class="image-overlay">
+                        <span>Since 1900 hồi đó</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Tại Sao Chọn HKT?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Giao Hàng Nhanh</h3>
+                    <p>Miễn phí vận chuyển cho đơn hàng từ 200.000đ. Giao hàng toàn quốc 2-4 ngày</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Đa Dạng Thể Loại</h3>
+                    <p>10,000+ đầu sách với đầy đủ các thể loại từ văn học, kinh tế, kỹ năng đến truyện tranh</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Chất Lượng Đảm Bảo</h3>
+                    <p>Sách chính hãng, nguyên bản. Đổi trả trong 7 ngày nếu có lỗi từ nhà sản xuất</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Hỗ Trợ 24/7</h3>
+                    <p>Đội ngũ chăm sóc khách hàng luôn sẵn sàng hỗ trợ mọi thắc mắc của bạn</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Đội Ngũ Của Chúng Tôi</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-photo">
+                        <img src="/Content/images/team-member1.jpg" alt="Võ Hồng Đăng Khoa">
+                    </div>
+                    <h3>Võ Hồng Đăng Khoa</h3>
+                    <p class="member-role">Founder & CEO</p>
+                    <p class="member-desc">Với 10 năm kinh nghiệm trong ngành xuất bản</p>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-photo">
+                        <img src="/Content/images/team-member2.jpg" alt="Trần Lê Minh Thư">
+                    </div>
+                    <h3>Trần Lê Minh Thư</h3>
+                    <p class="member-role">Content Manager</p>
+                    <p class="member-desc">Chuyên gia tuyển chọn và đánh giá sách</p>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-photo">
+                        <img src="/Content/images/team-member3.jpg" alt="Lê Trần Nhật Huy">
+                    </div>
+                    <h3>Lê Trần Nhật Huy</h3>
+                    <p class="member-role">Customer Support</p>
+                    <p class="member-desc">Luôn sẵn sàng hỗ trợ khách hàng 24/7</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Sẵn Sàng Khám Phá Thế Giới Sách?</h2>
+                <p>Tham gia cộng đồng hơn 50,000 độc giả của chúng tôi ngay hôm nay!</p>
+                <div class="cta-buttons">
+                    <a href="@Url.Action("Index", "Product")" class="btn btn-primary">
+                        <i class="fas fa-book"></i> Mua Sách Ngay
+                    </a>
+                    <a href="@Url.Action("Contact", "Home")" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i> Liên Hệ Với Chúng Tôi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section styles {
+    <link href="~/Content/css/about.css" rel="stylesheet" />
+}

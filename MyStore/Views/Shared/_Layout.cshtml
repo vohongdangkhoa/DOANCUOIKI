@@ -1,39 +1,158 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - HKT Bookstore</title> <!-- ĐỔI TITLE -->
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <link href="~/Content/css/book.css" rel="stylesheet" />
+    <link href="~/Content/css/cart.css" rel="stylesheet" />
+    <link href="~/Content/css/search.css" rel="stylesheet" />
+    <link href="~/Content/css/responsive.css" rel="stylesheet" />
+    <link href="~/Content/css/about.css" rel="stylesheet" />
+    <link href="~/Content/css/contact.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
-            </div>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p id="loadingText">Đang xử lý...</p>
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <!-- Alert Messages -->
+    <div class="alert-message alert-success" id="successMessage"></div>
+    <div class="alert-message alert-error" id="errorMessage"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <a href="@Url.Action("Index", "Home")" class="logo">
+                    <i class="fas fa-book"></i> HKT
+                </a>
+                <div class="search-box">
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+                    {
+                        <input type="text" name="q" placeholder="Tìm kiếm sách..." value="@ViewBag.SearchQuery">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    }
+                </div>
+                <div class="header-actions">
+                    <a href="@Url.Action("Index", "Cart")" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i> Giỏ hàng
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="@Url.Action("" +
+                            "Register", "Account")" class="user-icon">
+                        <i class="fas fa-user"></i> Tài khoản
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar">
+            <div class="container">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                    @{
+                        // THÊM TRY-CATCH ĐỂ TRÁNH LỖI
+                        try
+                        {
+                            var db = new MyStore.Models.MyStoreEntities();
+                            var categories = db.Categories.Take(6).ToList();
+                            foreach (var category in categories)
+                            {
+                                <li><a href="@Url.Action("Category", "Product", new { id = category.CategoryID })">@category.CategoryName</a></li>
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            <!-- FALLBACK CATEGORIES NẾU LỖI DATABASE -->
+                            <li><a href="/Product/Category/1">Văn học</a></li>
+                            <li><a href="/Product/Category/2">Kinh tế</a></li>
+                            <li><a href="/Product/Category/3">Truyện tranh</a></li>
+                            <li><a href="/Product/Category/4">Kỹ năng</a></li>
+                        }
+                    }
+                    <li><a href="@Url.Action("About", "Home")">Giới thiệu</a></li>
+                    <li><a href="@Url.Action("Contact", "Home")">Liên hệ</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Về HKT</h3>
+                    <a href="@Url.Action("About", "Home")">Giới thiệu</a>
+                    <a href="@Url.Action("Contact", "Home")">Liên hệ</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Danh mục</h3>
+                    @{
+                        // DÙNG LẠI CATEGORIES TỪ TRÊN HOẶC FALLBACK
+                        try
+                        {
+                            var db = new MyStore.Models.MyStoreEntities();
+                            var footerCategories = db.Categories.Take(4).ToList();
+
+                            foreach (var category in footerCategories)
+                            {
+                                <a href="@Url.Action("Category", "Books", new { id = category.CategoryID })">@category.CategoryName</a>
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            <a href="/Product/Category/1">Văn học</a>
+                            <a href="/Product/Category/2">Kinh tế</a>
+                            <a href="/Product/Category/3">Truyện tranh</a>
+                            <a href="/Product/Category/4">Kỹ năng</a>
+                        }
+                    }
+                </div>
+                <div class="footer-section">
+                    <h3>Hỗ trợ</h3>
+                    <a href="#">Hướng dẫn mua hàng</a>
+                    <a href="#">Chính sách vận chuyển</a>
+                    <a href="#">Chính sách đổi trả</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Liên hệ</h3>
+                    <a href="tel:0987654321"><i class="fas fa-phone"></i> 0987654321</a>
+                    <a href="mailto:hkt12345@gmail.com"><i class="fas fa-envelope"></i> hkt12345@gmail.com</a>
+                    <!-- THÊM MẠNG XÃ HỘI -->
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-zalo"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year - Tập đoàn HKT hân hạnh phục vụ quý ngài!</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/js/main.js"></script>
+    <script src="~/Scripts/js/book.js"></script>
+    <script src="~/Scripts/js/cart.js"></script>
+    <script src="~/Scripts/js/search.js"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

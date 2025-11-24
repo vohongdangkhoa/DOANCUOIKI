@@ -1,33 +1,162 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model MyStore.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "MyStore - Trang chủ";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
-
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+<div class="banner-carousel">
+    <div class="slides">
+        <div class="slide active">
+            <img src="~/Content/images/banner.jpg" alt="Banner 1">
+        </div>
+        <div class="slide">
+            <img src="~/Content/images/banner1.jpg" alt="Banner 2">
+        </div>
+        <div class="slide">
+            <img src="~/Content/images/banner2.jpg" alt="Banner 3">
+        </div>
     </div>
-</main>
+
+    <div class="carousel-dots">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+    </div>
+
+    <button class="carousel-prev">‹</button>
+    <button class="carousel-next">›</button>
+</div>
+
+<!-- Sách nổi bật -->
+<div class="container">
+    <h2 class="section-title">Sách nổi bật</h2>
+    <div class="products-grid">
+        @foreach (var book in Model.FeaturedBooks)
+        {
+            <div class="product-card">
+                <!-- QUAN TRỌNG: Sửa thành "Books" thay vì "Product" -->
+                <a href="@Url.Action("Details", "Books", new { id = book.BookID })" class="product-card-clickable"></a>
+                <a href="@Url.Action("Details", "Books", new { id = book.BookID })" class="product-image-link">
+                    <img src="@(string.IsNullOrEmpty(book.Image) ? "/Content/images/default-book.jpg" : book.Image)"
+                         alt="@book.BookTitle" class="product-image">
+                </a>
+                <div class="product-info">
+                    <!-- QUAN TRỌNG: Sửa thành "Books" thay vì "Product" -->
+                    <a href="@Url.Action("Details", "Books", new { id = book.BookID })" class="product-title">@book.BookTitle</a>
+                    <div class="product-price">@book.Price.ToString("N0") ₫</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="sold">Đã bán @(book.Stock / 10)k</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="buy-now-btn"
+                                data-book-id="@book.BookID"
+                                data-book-title="@book.BookTitle">
+                            Mua hàng
+                        </button>
+                        <button class="add-to-cart-btn"
+                                data-book-id="@book.BookID"
+                                data-book-title="@book.BookTitle">
+                            Thêm vào giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Sách mới -->
+<div class="container">
+    <h2 class="section-title">Sách mới về</h2>
+    <div class="products-grid">
+        @foreach (var book in Model.NewArrivals)
+        {
+            <div class="product-card">
+                <!-- QUAN TRỌNG: Sửa thành "Books" thay vì "Product" -->
+                <a href="@Url.Action("Details", "Books", new { id = book.BookID, area = "" })" class="product-card-clickable"></a>
+                <a href="@Url.Action("Details", "Books", new { id = book.BookID, area = "" })" class="product-image-link">
+                    <img src="@(string.IsNullOrEmpty(book.Image) ? "/Content/images/default-book.jpg" : book.Image)"
+                         alt="@book.BookTitle" class="product-image">
+                </a>
+                <div class="product-info">
+                    <!-- QUAN TRỌNG: Sửa thành "Books" thay vì "Product" -->
+                    <a href="@Url.Action("Details", "Books", new { id = book.BookID, area = "" })" class="product-title">@book.BookTitle</a>
+                    <div class="product-price">@book.Price.ToString("N0") ₫</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="sold">Đã bán @(book.Stock / 10)k</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="buy-now-btn"
+                                data-book-id="@book.BookID"
+                                data-book-title="@book.BookTitle">
+                            Mua hàng
+                        </button>
+                        <button class="add-to-cart-btn"
+                                data-book-id="@book.BookID"
+                                data-book-title="@book.BookTitle">
+                            Thêm vào giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Nút xem tất cả sách -->
+<div class="container text-center mt-5">
+    <a href="@Url.Action("Index", "Books")" class="btn btn-primary btn-lg">
+        <i class="fas fa-book"></i> Xem Tất Cả Sách
+    </a>
+</div>
+
+@section scripts {
+    <script>$(document).ready(function () {
+            // Xử lý thêm vào giỏ hàng
+            $('.add-to-cart-btn').click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var bookId = $(this).data('book-id');
+                var bookTitle = $(this).data('book-title');$.post('@Url.Action("AddToCart", "Cart")', { id: bookId })
+                    .done(function (response) {
+                        alert('Đã thêm "' + bookTitle + '" vào giỏ hàng');
+                    })
+                    .fail(function () {
+                        alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+                    });
+            });
+
+            // Xử lý mua ngay
+            $('.buy-now-btn').click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var bookId = $(this).data('book-id');
+                var bookTitle = $(this).data('book-title');
+
+                $.post('@Url.Action("AddToCart", "Cart")', { id: bookId })
+                    .done(function (response) {
+                        window.location.href = '@Url.Action("Index", "Cart")';
+                    })
+                    .fail(function () {
+                        alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+                    });
+            });
+        });
+    </script>
+}
