@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using MyStore.Models;
 using MyStore.Models.ViewModel;
+using PagedList;
+using PagedList.Mvc;
 
 namespace MyStore.Areas.Admin.Controllers
 {
@@ -16,52 +18,42 @@ namespace MyStore.Areas.Admin.Controllers
         private MyStoreEntities db = new MyStoreEntities();
 
         // GET: Admin/Books
-        public ActionResult Index(string keyword, decimal? minPrice, decimal? maxPrice,string sortOrder)
+        public ActionResult Index(string keyword, decimal? minPrice, decimal? maxPrice, string sortOrder, int page = 1)
         {
             var books = db.Books.Include(b => b.Category).AsQueryable();
 
             if (!string.IsNullOrEmpty(keyword))
-            {
                 books = books.Where(b => b.BookTitle.Contains(keyword));
-            }
 
             if (minPrice.HasValue)
-            {
                 books = books.Where(b => b.Price >= minPrice.Value);
-            }
 
             if (maxPrice.HasValue)
-            {
                 books = books.Where(b => b.Price <= maxPrice.Value);
-            }
-            switch(sortOrder)
-            {
-                case "price_asc":
-                    books = books.OrderBy(b => b.Price);
-                    break;
-                case "price_desc":
-                    books = books.OrderByDescending(b => b.Price);
-                    break;
-                case "title_asc":
-                    books = books.OrderBy(b => b.BookTitle);
-                    break;
-                case "title_desc":
-                    books = books.OrderByDescending(b => b.BookTitle);
-                    break;
-                default:
-                    books = books.OrderBy(b => b.BookID);
-                    break;
-            }ViewBag.CurrentSort = sortOrder;
 
+            switch (sortOrder)
+            {
+                case "price_asc": books = books.OrderBy(b => b.Price); break;
+                case "price_desc": books = books.OrderByDescending(b => b.Price); break;
+                case "title_asc": books = books.OrderBy(b => b.BookTitle); break;
+                case "title_desc": books = books.OrderByDescending(b => b.BookTitle); break;
+                default: books = books.OrderBy(b => b.BookID); break;
+            }
+
+            ViewBag.CurrentSort = sortOrder;
+
+            int pageSize = 4; // Số sách mỗi trang
+            var pagedBooks = books.ToPagedList(page, pageSize);
 
             var vm = new BookSearchVM
             {
                 Keyword = keyword,
                 MinPrice = minPrice,
                 MaxPrice = maxPrice,
-                Books = books.ToList()
-                
-
+                SortOrder = sortOrder,
+                PageNumber = page,
+                PageSize = pageSize,
+                Books = pagedBooks
             };
 
             return View(vm);

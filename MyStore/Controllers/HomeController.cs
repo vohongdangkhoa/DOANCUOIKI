@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MyStore.Models;
+using System.Data.Entity;
+
 
 namespace MyStore.Controllers
 {
@@ -16,7 +18,7 @@ namespace MyStore.Controllers
             var model = new HomeViewModel
             {
                 FeaturedBooks = db.Books
-                    .Include("Category")
+                    .Include(b => b.Category)
                     .OrderByDescending(b => b.Stock)
                     .Take(12)
                     .ToList(),
@@ -27,7 +29,7 @@ namespace MyStore.Controllers
                     .ToList(),
 
                 NewArrivals = db.Books
-                    .Include("Category")
+                    .Include(b => b.Category)
                     .OrderByDescending(b => b.BookID)
                     .Take(8)
                     .ToList()
@@ -42,13 +44,14 @@ namespace MyStore.Controllers
                 return RedirectToAction("Index");
 
             var books = db.Books
-                .Include("Category")
+                .Include(b => b.Category)
                 .Where(b => b.BookTitle.Contains(q) || b.Description.Contains(q))
                 .ToList();
 
             ViewBag.SearchQuery = q;
             return View(books);
         }
+
         public ActionResult About()
         {
             return View();

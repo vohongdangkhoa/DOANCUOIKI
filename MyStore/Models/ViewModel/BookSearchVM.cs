@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PagedList.Mvc;
+
 
 namespace MyStore.Models.ViewModel
 {
@@ -11,6 +13,8 @@ namespace MyStore.Models.ViewModel
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public string SortOrder { get; set; }
-        public List<Book> Books { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; } = 10;
+        public  PagedList.IPagedList<Book> Books { get; set; }
     }
 }

@@ -6,7 +6,6 @@
 }
 <h2 class="bg-success">DANH SÁCH NGƯỜI DÙNG</h2>
 
-
 <table class="table table-bordered table-striped">
     <tr>
         <th>Tên Đăng Nhập</th>
@@ -20,13 +19,22 @@
             <td>@item.Username</td>
             <td>@item.UserRole</td>
             <td>
-                @Html.ActionLink("Chi Tiết", "Details", new { id = item.Username }, new { @class = "btn btn-primary" }) 
-                @Html.ActionLink("Chỉnh Sửa", "Edit", new { id = item.Username}, new { @class = "btn btn-warning" }) 
-                @Html.ActionLink("Xóa", "Delete", new { id = item.Username}, new { @class = "btn btn-danger" })
+
+                <!-- Tạo URL dạng: /Admin/Users/Details?id=bin -->
+                <a href="@Url.Action("Details", "Users", new { area = "Admin" })?id=@Url.Encode(item.Username)"
+                   class="btn btn-primary">Chi Tiết</a>
+
+                <a href="@Url.Action("Edit", "Users", new { area = "Admin" })?id=@Url.Encode(item.Username)"
+                   class="btn btn-warning">Chỉnh Sửa</a>
+
+                <a href="@Url.Action("Delete", "Users", new { area = "Admin" })?id=@Url.Encode(item.Username)"
+                   class="btn btn-danger">Xóa</a>
+
             </td>
         </tr>
     }
 </table>
+
 <p>
-    @Html.ActionLink("Tạo Tài Khoản Người Dùng Mới ", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Tạo Tài Khoản Người Dùng Mới", "Create", null, new { @class = "btn btn-success" })
 </p>
